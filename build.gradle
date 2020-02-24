@@ -22,8 +22,16 @@ bootJar {
     dependsOn vaadinPrepareNode, vaadinBuildFrontend
 }
 
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
     implementation 'org.codehaus.groovy:groovy'
     implementation enforcedPlatform("com.vaadin:vaadin-bom:14.1.17")
     implementation("com.vaadin:vaadin-core") {
