@@ -33,9 +33,9 @@ out/
 .vscode/
 
 ### VAADIN ###
-/node
-/node_modules
-/package-lock.json
-/package.json
-/webpack.config.js
-/webpack.generated.js
+node
+node_modules
+package-lock.json
+package.json
+webpack.config.js
+webpack.generated.js

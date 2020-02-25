@@ -1,0 +1,48 @@
+plugins {
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
+    id 'com.vaadin' version '0.5.0'
+    id 'groovy'
+}
+
+bootRun {
+    dependsOn vaadinPrepareNode, vaadinPrepareFrontend
+}
+
+bootJar {
+    dependsOn vaadinPrepareNode, vaadinBuildFrontend
+}
+
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+
+repositories {
+    maven {
+        url = "https://maven.vaadin.com/vaadin-addons"
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+    implementation "org.codehaus.groovy:groovy"
+    implementation enforcedPlatform("com.vaadin:vaadin-bom:14.1.17")
+    implementation("com.vaadin:vaadin-core") {
+        [
+                "com.vaadin.webjar",
+                "org.webjars.bowergithub.insites",
+                "org.webjars.bowergithub.polymer",
+                "org.webjars.bowergithub.polymerelements",
+                "org.webjars.bowergithub.vaadin",
+                "org.webjars.bowergithub.webcomponents"
+        ].each { exclude group: it }
+    }
+    implementation("com.vaadin:vaadin-spring-boot:3.2.1")
+    implementation project(":simpletheme")
+    implementation project(":simplecomponent")
+    implementation "org.vaadin.stefan:fullcalendar2:2.0.0"
+}

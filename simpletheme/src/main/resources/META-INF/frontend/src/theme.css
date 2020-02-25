@@ -1,0 +1,13 @@
+body {
+    box-sizing: border-box;
+    padding: 2ex 2em;
+    margin: 0;
+    background-color: #eee;
+}
+
+div {
+    box-sizing: border-box;
+    padding: 1ex 1em;
+    border: 1px solid #999;
+    background-color: white;
+}
