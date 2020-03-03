@@ -1,13 +1,13 @@
 plugins {
     id 'org.springframework.boot' version '2.2.4.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-    id 'com.vaadin' version '0.5.0'
+    id 'com.vaadin' version '0.6.0'
     id 'groovy'
 }
 
 group = 'net.ofnir'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
+sourceCompatibility = '11'
 
 repositories {
     mavenLocal()
@@ -33,7 +33,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     implementation 'org.codehaus.groovy:groovy'
-    implementation enforcedPlatform("com.vaadin:vaadin-bom:14.1.17")
+    implementation enforcedPlatform("com.vaadin:vaadin-bom:${getAt("vaadin.version")}")
     implementation("com.vaadin:vaadin-core") {
         [
                 "com.vaadin.webjar",
@@ -44,5 +44,5 @@ dependencies {
                 "org.webjars.bowergithub.webcomponents"
         ].each { exclude group: it }
     }
-    implementation("com.vaadin:vaadin-spring-boot:3.2.1")
+    implementation("com.vaadin:vaadin-spring-boot-starter")
 }
