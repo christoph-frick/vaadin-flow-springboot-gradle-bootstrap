@@ -12,6 +12,9 @@ sourceCompatibility = '11'
 repositories {
     mavenLocal()
     mavenCentral()
+    maven {
+        url "https://maven.vaadin.com/vaadin-addons"
+    }
 }
 
 bootRun {
@@ -45,4 +48,5 @@ dependencies {
         ].each { exclude group: it }
     }
     implementation("com.vaadin:vaadin-spring-boot-starter")
+    implementation("com.github.appreciated:app-layout-addon:4.0.0.rc5")
 }
