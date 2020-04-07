@@ -1,0 +1,7 @@
+# prevent re-build from smashing routes.  See https://www.youtube.com/watch?v=0M1y2EnkAAk
+---
+spring:
+  devtools:
+    restart:
+      poll-interval: 2s
+      quiet-period: 1s
