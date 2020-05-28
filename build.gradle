@@ -17,7 +17,6 @@ repositories {
 bootRun {
     environment("SPRING_PROFILES_ACTIVE", "dev")
     systemProperties = System.properties
-    dependsOn vaadinPrepareFrontend
 }
 
 bootJar {
