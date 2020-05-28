@@ -1,7 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '2.2.6.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-    id 'com.vaadin' version '0.6.0'
+    id 'com.vaadin' version '0.7.0'
     id 'groovy'
 }
 
@@ -17,11 +17,11 @@ repositories {
 bootRun {
     environment("SPRING_PROFILES_ACTIVE", "dev")
     systemProperties = System.properties
-    dependsOn vaadinPrepareNode, vaadinPrepareFrontend
+    dependsOn vaadinPrepareFrontend
 }
 
 bootJar {
-    dependsOn vaadinPrepareNode, vaadinBuildFrontend
+    dependsOn vaadinBuildFrontend
 }
 
 configurations {
