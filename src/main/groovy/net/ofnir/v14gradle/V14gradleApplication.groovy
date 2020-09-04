@@ -3,6 +3,7 @@ package net.ofnir.v14gradle
 import com.vaadin.flow.component.Composite
 import com.vaadin.flow.component.Text
 import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.H1
@@ -35,14 +36,19 @@ class HelloService {
 class MainView extends Composite<Div> {
     MainView(HelloService lolService) {
         TextField tf = new TextField().tap {
-            placeholder = "enter name to greet"
+            placeholder = "Please enter a name to greet"
         }
         Button b = new Button("Greet!").tap {
+            addThemeVariants(ButtonVariant.LUMO_PRIMARY)
             addClickListener {
                 content.add(new Div(new Text(lolService.sayHello(tf.value))))
             }
         }
-        content.add(new H1("Greetings!"))
-        content.add(new FormLayout(tf, b))
+        content.tap {
+            add(new H1("Greeting Service"))
+            add(new FormLayout(tf, b).tap{
+                responsiveSteps = [new FormLayout.ResponsiveStep("0px", 1)]
+            })
+        }
     }
 }
