@@ -37,9 +37,11 @@ class MainView extends Composite<Div> {
     MainView(HelloService lolService) {
         TextField tf = new TextField().tap {
             placeholder = "Please enter a name to greet"
+            id = "name-input"
         }
         Button b = new Button("Greet!").tap {
             addThemeVariants(ButtonVariant.LUMO_PRIMARY)
+            id = "greet-button"
             addClickListener {
                 content.add(new Div(new Text(lolService.sayHello(tf.value))))
             }
