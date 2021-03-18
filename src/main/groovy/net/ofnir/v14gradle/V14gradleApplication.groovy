@@ -7,7 +7,6 @@ import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.H1
-import com.vaadin.flow.component.page.AppShellConfigurator
 import com.vaadin.flow.component.page.BodySize
 import com.vaadin.flow.component.page.Viewport
 import com.vaadin.flow.component.textfield.TextField
@@ -38,7 +37,7 @@ class HelloService {
 @Theme(value = Lumo)
 @Viewport(Viewport.DEVICE_DIMENSIONS)
 @BodySize(height = "100vh", width = "100vw")
-class MainView extends Composite<Div> implements AppShellConfigurator {
+class MainView extends Composite<Div> {
     MainView(HelloService lolService) {
         TextField tf = new TextField().tap {
             placeholder = "Please enter a name to greet"
