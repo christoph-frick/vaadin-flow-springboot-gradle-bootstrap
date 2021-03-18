@@ -1,22 +1,18 @@
 package net.ofnir.v14gradle
 
-import com.vaadin.flow.component.Composite
-import com.vaadin.flow.component.Text
-import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.button.ButtonVariant
-import com.vaadin.flow.component.formlayout.FormLayout
-import com.vaadin.flow.component.html.Div
-import com.vaadin.flow.component.html.H1
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.Tag
+import com.vaadin.flow.component.dependency.JsModule
 import com.vaadin.flow.component.page.BodySize
 import com.vaadin.flow.component.page.Viewport
-import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.router.Route
 import com.vaadin.flow.spring.annotation.EnableVaadin
 import com.vaadin.flow.theme.Theme
 import com.vaadin.flow.theme.lumo.Lumo
+import elemental.json.Json
+import groovy.json.JsonOutput
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.stereotype.Service
 
 @SpringBootApplication
 @EnableVaadin
@@ -28,33 +24,25 @@ class V14gradleApplication {
 
 }
 
-@Service
-class HelloService {
-    String sayHello(String to) { "Hello, ${to ?: "World"}" }
-}
-
 @Route("")
 @Theme(value = Lumo)
 @Viewport(Viewport.DEVICE_DIMENSIONS)
 @BodySize(height = "100vh", width = "100vw")
-class MainView extends Composite<Div> {
-    MainView(HelloService lolService) {
-        TextField tf = new TextField().tap {
-            placeholder = "Please enter a name to greet"
-            id = "name-input"
-        }
-        Button b = new Button("Greet!").tap {
-            addThemeVariants(ButtonVariant.LUMO_PRIMARY)
-            id = "greet-button"
-            addClickListener {
-                content.add(new Div(new Text(lolService.sayHello(tf.value))))
-            }
-        }
-        content.tap {
-            add(new H1("Greeting Service"))
-            add(new FormLayout(tf, b).tap{
-                responsiveSteps = [new FormLayout.ResponsiveStep("0px", 1)]
-            })
-        }
+@Tag('edit-grid')
+@JsModule('EditGrid.ts')
+class MainView extends Component /* must be component, LitElement is not yet there */{
+    MainView() {
+        // TODO: there is no "Model" right now
+        element.setPropertyJson('items', Json.instance().parse( /* Json.parse always want's to cast to JsonObject */
+                JsonOutput.toJson(
+                        (0..59).collectMany {
+                            [
+                                    [alive: true, name: "Ozzy", role: 'singer'],
+                                    [alive: false, name: "Lemmy", role: 'bass'],
+                            ]
+                        }
+                )
+        )
+        )
     }
 }
