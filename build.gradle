@@ -12,6 +12,9 @@ sourceCompatibility = '11'
 repositories {
     mavenLocal()
     mavenCentral()
+    maven {
+        url = "https://maven.vaadin.com/vaadin-prereleases"
+    }
 }
 
 bootRun {
