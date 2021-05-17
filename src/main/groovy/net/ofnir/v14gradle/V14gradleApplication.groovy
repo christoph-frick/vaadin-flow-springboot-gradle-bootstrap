@@ -13,7 +13,6 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.router.Route
 import com.vaadin.flow.spring.annotation.EnableVaadin
 import com.vaadin.flow.theme.Theme
-import com.vaadin.flow.theme.lumo.Lumo
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.stereotype.Service
@@ -34,7 +33,7 @@ class HelloService {
 }
 
 @Route("")
-@Theme(value = Lumo)
+@Theme(themeFolder = 'app-theme')
 @Viewport(Viewport.DEVICE_DIMENSIONS)
 @BodySize(height = "100vh", width = "100vw")
 class MainView extends Composite<Div> {
