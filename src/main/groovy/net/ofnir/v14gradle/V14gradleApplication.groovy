@@ -4,6 +4,7 @@ import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Composite
 import com.vaadin.flow.component.HasValue
+import com.vaadin.flow.component.HasValueAndElement
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.formlayout.FormLayout
@@ -65,7 +66,7 @@ class MainView extends Composite<Div> {
     }
 }
 
-trait BinderField<D> implements HasValue<BinderFieldValueChangeEvent<D>, D> {
+trait BinderField<D> implements HasValueAndElement<BinderFieldValueChangeEvent<D>, D> {
 
     private Binder<D> binder
 
@@ -123,17 +124,6 @@ trait BinderField<D> implements HasValue<BinderFieldValueChangeEvent<D>, D> {
     @Override
     boolean isReadOnly() {
         this.readOnly
-    }
-
-    @Override
-    void setRequiredIndicatorVisible(boolean requiredIndicatorVisible) {
-        // TODO
-    }
-
-    @Override
-    boolean isRequiredIndicatorVisible() {
-        // TODO
-        false
     }
 
     BinderValidationStatus<D> validate() {
