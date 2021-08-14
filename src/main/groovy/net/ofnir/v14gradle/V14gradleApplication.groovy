@@ -60,7 +60,7 @@ class MainView extends Composite<Div> {
     }
 }
 
-trait BindingForm<C extends Component, D> implements HasValue<AbstractField.ComponentValueChangeEvent<C, D>, D> {
+trait BinderField<C extends Component, D> implements HasValue<AbstractField.ComponentValueChangeEvent<C, D>, D> {
 
     private Binder<D> binder
 
@@ -140,7 +140,7 @@ class Person {
     LocalDate dayOfBirth
 }
 
-class PersonField extends FormLayout implements BindingForm<PersonField, Person> {
+class PersonField extends FormLayout implements BinderField<PersonField, Person> {
 
     final Class<Person> clazz = Person
 
@@ -180,7 +180,7 @@ class Pair {
     Person b
 }
 
-class PairField extends FormLayout implements BindingForm<PairField, Pair> {
+class PairField extends FormLayout implements BinderField<PairField, Pair> {
 
     final Class<Pair> clazz = Pair
 
