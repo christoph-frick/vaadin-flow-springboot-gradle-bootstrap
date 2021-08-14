@@ -46,8 +46,13 @@ class V14gradleApplication {
 @BodySize(height = "100vh", width = "100vw")
 class MainView extends Composite<Div> {
     MainView() {
-        def pairField = new PairField()
-        pairField.value = new Pair()
+        def pairField = new PairField().tap{
+            value = new Pair()
+            addValueChangeListener{
+                Notification.show("value change from ${it.oldValue} to ${it.value} from ${it.fromClient ? 'client' : 'system'}")
+            }
+        }
+
         content.tap {
             add(pairField)
             add(new Button("Show").tap {
@@ -66,6 +71,8 @@ trait BinderField<C extends Component, D> implements HasValue<AbstractField.Comp
 
     private boolean readOnly = false
 
+    private D oldValue
+
     abstract Class<D> getClazz()
 
     abstract void bindFields(Binder<D> binder)
@@ -81,17 +88,25 @@ trait BinderField<C extends Component, D> implements HasValue<AbstractField.Comp
 
     @Override
     void setValue(D value) {
-        binder.setBean(value)
+        binder.readBean(value)
+        oldValue = value
     }
 
     @Override
     D getValue() {
-        binder.getBean()
+        def newValue = emptyValue
+        binder.writeBeanAsDraft(newValue)
+        newValue
     }
 
     @Override
     Registration addValueChangeListener(ValueChangeListener listener) {
-        binder.addValueChangeListener(listener)
+        binder.addValueChangeListener{
+            listener.valueChanged(
+                // FIXME: this is not the proper old value; this is the initially set value
+                new AbstractField.ComponentValueChangeEvent(this, this, oldValue, it.fromClient)
+            )
+        }
     }
 
     @Override
