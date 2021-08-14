@@ -65,7 +65,7 @@ class MainView extends Composite<Div> {
     }
 }
 
-trait BinderField<C extends Component, D> implements HasValue<AbstractField.ComponentValueChangeEvent<C, D>, D> {
+trait BinderField<D> implements HasValue<BinderFieldValueChangeEvent<D>, D> {
 
     private Binder<D> binder
 
@@ -104,7 +104,7 @@ trait BinderField<C extends Component, D> implements HasValue<AbstractField.Comp
         binder.addValueChangeListener{
             listener.valueChanged(
                 // FIXME: this is not the proper old value; this is the initially set value
-                new AbstractField.ComponentValueChangeEvent(this, this, oldValue, it.fromClient)
+                new BinderFieldValueChangeEvent<D>(this, value, oldValue, it.fromClient)
             )
         }
     }
@@ -140,9 +140,17 @@ trait BinderField<C extends Component, D> implements HasValue<AbstractField.Comp
         binder.validate()
     }
 
+    @Canonical
+    static class BinderFieldValueChangeEvent<D> implements ValueChangeEvent<D> {
+        final HasValue<?,D> hasValue
+        final D value
+        final D oldValue
+        final boolean fromClient
+    }
+
 }
 
-trait BeanValidationBinderField<C extends Component, D> extends BinderField<C, D> {
+trait BeanValidationBinderField<D> extends BinderField<D> {
     @Override
     Binder<D> buildBinder() {
         new BeanValidationBinder<D>(clazz)
@@ -162,7 +170,7 @@ class Person {
     LocalDate dayOfBirth
 }
 
-class PersonField extends FormLayout implements BeanValidationBinderField<PersonField, Person> {
+class PersonField extends FormLayout implements BeanValidationBinderField<Person> {
 
     final Class<Person> clazz = Person
 
@@ -198,7 +206,7 @@ class Pair {
     Person b
 }
 
-class PairField extends FormLayout implements BeanValidationBinderField<PairField, Pair> {
+class PairField extends FormLayout implements BeanValidationBinderField<Pair> {
 
     final Class<Pair> clazz = Pair
 
