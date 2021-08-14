@@ -63,17 +63,15 @@ class MainView extends Composite<Div> {
 trait BindingForm<C extends Component, D> implements HasValue<AbstractField.ComponentValueChangeEvent<C, D>, D> {
 
     private Binder<D> binder
-    boolean readOnly = false
 
-    abstract void buildForm()
-
-    abstract void bindFields(Binder<D> binder)
+    private boolean readOnly = false
 
     abstract Class<D> getClazz()
 
-    void setup() {
+    abstract void bindFields(Binder<D> binder)
+
+    void setupBindings() {
         this.binder = buildBinder()
-        buildForm()
         bindFields(binder)
     }
 
@@ -102,14 +100,14 @@ trait BindingForm<C extends Component, D> implements HasValue<AbstractField.Comp
     }
 
     @Override
-    void clear() {
-        // TODO: binder.clearFields()
-    }
-
-    @Override
     void setReadOnly(boolean readOnly) {
         this.readOnly = readOnly
         binder.setReadOnly(readOnly)
+    }
+
+    @Override
+    boolean isReadOnly() {
+        this.readOnly
     }
 
     @Override
@@ -147,21 +145,17 @@ class PersonField extends FormLayout implements BindingForm<PersonField, Person>
     final Class<Person> clazz = Person
 
     PersonField() {
-        setup()
+        add(firstName = new TextField("First name"))
+        add(lastName = new TextField("Last name"))
+        add(email = new EmailField("Email"))
+        add(dayOfBirth = new DatePicker("Date of birth"))
+        setupBindings()
     }
 
     private TextField firstName
     private TextField lastName
     private EmailField email
     private DatePicker dayOfBirth
-
-    @Override
-    void buildForm() {
-        add(firstName = new TextField("First name"))
-        add(lastName = new TextField("Last name"))
-        add(email = new EmailField("Email"))
-        add(dayOfBirth = new DatePicker("Date of birth"))
-    }
 
     @Override
     void bindFields(Binder<Person> binder) {
@@ -191,16 +185,12 @@ class PairField extends FormLayout implements BindingForm<PairField, Pair> {
     final Class<Pair> clazz = Pair
 
     PairField() {
-        setup()
+        add(a = new PersonField())
+        add(b = new PersonField())
+        setupBindings()
     }
 
     private PersonField a, b
-
-    @Override
-    void buildForm() {
-        add(a = new PersonField())
-        add(b = new PersonField())
-    }
 
     @Override
     void bindFields(Binder<Pair> binder) {
