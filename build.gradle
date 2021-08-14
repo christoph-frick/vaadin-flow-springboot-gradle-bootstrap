@@ -12,9 +12,8 @@ sourceCompatibility = '11'
 repositories {
     mavenLocal()
     mavenCentral()
-    maven {
-        url = "https://maven.vaadin.com/vaadin-prereleases"
-    }
+    maven { url = "https://maven.vaadin.com/vaadin-prereleases" }
+    maven { url 'https://maven.vaadin.com/vaadin-addons' }
 }
 
 bootRun {
@@ -34,8 +33,9 @@ configurations {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
     developmentOnly("org.springframework.boot:spring-boot-devtools")
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation('org.springframework.boot:spring-boot-starter-validation')
     implementation 'org.codehaus.groovy:groovy'
     implementation enforcedPlatform("com.vaadin:vaadin-bom:${getAt("vaadin.version")}")
     implementation("com.vaadin:vaadin-core") {
@@ -49,4 +49,5 @@ dependencies {
         ].each { exclude group: it }
     }
     implementation("com.vaadin:vaadin-spring-boot-starter")
+    implementation("org.github.legioth:field:0.10.0.1")
 }
