@@ -1,10 +1,9 @@
 package net.ofnir.v14gradle
 
-
 import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Composite
-import com.vaadin.flow.component.HasValueAndElement
+import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.formlayout.FormLayout
@@ -16,6 +15,7 @@ import com.vaadin.flow.component.textfield.EmailField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.binder.BeanValidationBinder
 import com.vaadin.flow.data.binder.Binder
+import com.vaadin.flow.data.binder.BinderValidationStatus
 import com.vaadin.flow.router.Route
 import com.vaadin.flow.shared.Registration
 import com.vaadin.flow.spring.annotation.EnableVaadin
@@ -52,7 +52,7 @@ class MainView extends Composite<Div> {
             add(pairField)
             add(new Button("Show").tap {
                 addClickListener {
-                    pairField.binder.validate()
+                    pairField.validate()
                     Notification.show(pairField.value.toString())
                 }
             })
@@ -60,24 +60,24 @@ class MainView extends Composite<Div> {
     }
 }
 
-abstract class BindingForm<C extends Component, D> extends Composite<C> implements HasValueAndElement<AbstractField.ComponentValueChangeEvent<C, D>, D> {
+trait BindingForm<C extends Component, D> implements HasValue<AbstractField.ComponentValueChangeEvent<C, D>, D> {
 
-    final Class<D> clazz
-    final Binder<D> binder
+    private Binder<D> binder
     boolean readOnly = false
 
-    abstract protected void buildForm()
+    abstract void buildForm()
 
-    abstract protected void bindFields(Binder<D> binder)
+    abstract void bindFields(Binder<D> binder)
 
-    BindingForm(Class<D> clazz) {
-        this.clazz = clazz
+    abstract Class<D> getClazz()
+
+    void setup() {
         this.binder = buildBinder()
         buildForm()
         bindFields(binder)
     }
 
-    protected Binder<D> buildBinder() {
+    Binder<D> buildBinder() {
         new Binder<D>(clazz)
     }
 
@@ -123,6 +123,10 @@ abstract class BindingForm<C extends Component, D> extends Composite<C> implemen
         false
     }
 
+    BinderValidationStatus<D> validate() {
+        binder.validate()
+    }
+
 }
 
 @Canonical
@@ -138,10 +142,12 @@ class Person {
     LocalDate dayOfBirth
 }
 
-class PersonField extends BindingForm<FormLayout, Person> {
+class PersonField extends FormLayout implements BindingForm<PersonField, Person> {
+
+    final Class<Person> clazz = Person
 
     PersonField() {
-        super(Person)
+        setup()
     }
 
     private TextField firstName
@@ -150,17 +156,15 @@ class PersonField extends BindingForm<FormLayout, Person> {
     private DatePicker dayOfBirth
 
     @Override
-    protected void buildForm() {
-        content.tap {
-            add(firstName = new TextField("First name"))
-            add(lastName = new TextField("Last name"))
-            add(email = new EmailField("Email"))
-            add(dayOfBirth = new DatePicker("Date of birth"))
-        }
+    void buildForm() {
+        add(firstName = new TextField("First name"))
+        add(lastName = new TextField("Last name"))
+        add(email = new EmailField("Email"))
+        add(dayOfBirth = new DatePicker("Date of birth"))
     }
 
     @Override
-    protected void bindFields(Binder<Person> binder) {
+    void bindFields(Binder<Person> binder) {
         binder.forField(firstName).bind("firstName")
         binder.forField(lastName).bind("lastName")
         binder.forField(email).bind("email")
@@ -168,7 +172,7 @@ class PersonField extends BindingForm<FormLayout, Person> {
     }
 
     @Override
-    protected Binder<Person> buildBinder() {
+    Binder<Person> buildBinder() {
         new BeanValidationBinder<Person>(Person)
     }
 }
@@ -176,36 +180,36 @@ class PersonField extends BindingForm<FormLayout, Person> {
 @Canonical
 class Pair {
     @NotNull
-    Person a = new Person()
+    Person a
 
     @NotNull
-    Person b = new Person()
+    Person b
 }
 
-class PairField extends BindingForm<FormLayout, Pair> {
+class PairField extends FormLayout implements BindingForm<PairField, Pair> {
+
+    final Class<Pair> clazz = Pair
 
     PairField() {
-        super(Pair)
+        setup()
     }
 
     private PersonField a, b
 
     @Override
-    protected void buildForm() {
-        content.tap {
-            add(a = new PersonField())
-            add(b = new PersonField())
-        }
+    void buildForm() {
+        add(a = new PersonField())
+        add(b = new PersonField())
     }
 
     @Override
-    protected void bindFields(Binder<Pair> binder) {
+    void bindFields(Binder<Pair> binder) {
         binder.forField(a).bind("a")
         binder.forField(b).bind("b")
     }
 
     @Override
-    protected Binder<Pair> buildBinder() {
+    Binder<Pair> buildBinder() {
         new BeanValidationBinder<Pair>(Pair)
     }
 }
