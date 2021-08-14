@@ -43,3 +43,4 @@ out/
 /pnpmfile.js
 /tsconfig.json
 /types.d.ts
+/src/main/resources/META-INF/resources/themes/app-theme/app-theme.generated.js
