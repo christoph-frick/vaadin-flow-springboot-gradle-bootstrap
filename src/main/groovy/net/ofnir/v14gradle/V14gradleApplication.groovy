@@ -127,6 +127,13 @@ trait BinderField<C extends Component, D> implements HasValue<AbstractField.Comp
 
 }
 
+trait BeanValidationBinderField<C extends Component, D> extends BinderField<C, D> {
+    @Override
+    Binder<D> buildBinder() {
+        new BeanValidationBinder<D>(clazz)
+    }
+}
+
 @Canonical
 class Person {
     @NotEmpty
@@ -140,7 +147,7 @@ class Person {
     LocalDate dayOfBirth
 }
 
-class PersonField extends FormLayout implements BinderField<PersonField, Person> {
+class PersonField extends FormLayout implements BeanValidationBinderField<PersonField, Person> {
 
     final Class<Person> clazz = Person
 
@@ -165,10 +172,6 @@ class PersonField extends FormLayout implements BinderField<PersonField, Person>
         binder.forField(dayOfBirth).bind("dayOfBirth")
     }
 
-    @Override
-    Binder<Person> buildBinder() {
-        new BeanValidationBinder<Person>(Person)
-    }
 }
 
 @Canonical
@@ -180,7 +183,7 @@ class Pair {
     Person b
 }
 
-class PairField extends FormLayout implements BinderField<PairField, Pair> {
+class PairField extends FormLayout implements BeanValidationBinderField<PairField, Pair> {
 
     final Class<Pair> clazz = Pair
 
@@ -196,10 +199,5 @@ class PairField extends FormLayout implements BinderField<PairField, Pair> {
     void bindFields(Binder<Pair> binder) {
         binder.forField(a).bind("a")
         binder.forField(b).bind("b")
-    }
-
-    @Override
-    Binder<Pair> buildBinder() {
-        new BeanValidationBinder<Pair>(Pair)
     }
 }
