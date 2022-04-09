@@ -1,14 +1,14 @@
 package net.ofnir.v14gradle
 
 import com.vaadin.flow.component.Composite
+import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.Text
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.H1
-import com.vaadin.flow.component.page.BodySize
-import com.vaadin.flow.component.page.Viewport
+import com.vaadin.flow.component.page.AppShellConfigurator
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.router.Route
 import com.vaadin.flow.spring.annotation.EnableVaadin
@@ -19,7 +19,8 @@ import org.springframework.stereotype.Service
 
 @SpringBootApplication
 @EnableVaadin
-class V14gradleApplication {
+@Theme('app-theme')
+class V14gradleApplication implements AppShellConfigurator {
 
     static void main(String[] args) {
         SpringApplication.run(V14gradleApplication, args)
@@ -33,18 +34,17 @@ class HelloService {
 }
 
 @Route("")
-@Theme(themeFolder = 'app-theme')
-@Viewport(Viewport.DEVICE_DIMENSIONS)
-@BodySize(height = "100vh", width = "100vw")
 class MainView extends Composite<Div> {
     MainView(HelloService lolService) {
         TextField tf = new TextField().tap {
             placeholder = "Please enter a name to greet"
             id = "name-input"
+            focus()
         }
         Button b = new Button("Greet!").tap {
             addThemeVariants(ButtonVariant.LUMO_PRIMARY)
             id = "greet-button"
+            addClickShortcut(Key.ENTER)
             addClickListener {
                 content.add(new Div(new Text(lolService.sayHello(tf.value))))
             }
