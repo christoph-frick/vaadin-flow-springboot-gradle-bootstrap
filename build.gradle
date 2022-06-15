@@ -39,17 +39,7 @@ dependencies {
     implementation platform("org.apache.groovy:groovy-bom:${getAt('groovy.version')}")
 
     implementation "org.apache.groovy:groovy"
-
-    implementation("com.vaadin:vaadin-spring-boot-starter") {
-        [
-            "com.vaadin.webjar",
-            "org.webjars.bowergithub.insites",
-            "org.webjars.bowergithub.polymer",
-            "org.webjars.bowergithub.polymerelements",
-            "org.webjars.bowergithub.vaadin",
-            "org.webjars.bowergithub.webcomponents"
-        ].each { exclude group: it }
-    }
+    implementation("com.vaadin:vaadin-spring-boot-starter")
 
     developmentOnly platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
