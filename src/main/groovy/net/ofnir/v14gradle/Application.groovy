@@ -20,10 +20,10 @@ import org.springframework.stereotype.Service
 @SpringBootApplication
 @EnableVaadin
 @Theme('app-theme')
-class V14gradleApplication implements AppShellConfigurator {
+class VaadinApplication implements AppShellConfigurator {
 
     static void main(String[] args) {
-        SpringApplication.run(V14gradleApplication, args)
+        SpringApplication.run(VaadinApplication, args)
     }
 
 }
