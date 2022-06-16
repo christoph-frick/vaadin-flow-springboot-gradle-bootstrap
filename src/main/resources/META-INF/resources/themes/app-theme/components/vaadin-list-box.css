@@ -1,0 +1,29 @@
+:host {
+    --responsive-size: 20em;
+}
+
+:host {
+    width: var(--responsive-size);
+}
+
+@media (min-width: 800px) {
+    :host {
+        width: calc(2*var(--responsive-size));
+    }
+}
+
+@media (min-width: 1000px) {
+    :host {
+        width: calc(3*var(--responsive-size));
+    }
+}
+
+[part="items"] {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+[part="items"] ::slotted(vaadin-item) {
+    width: var(--responsive-size);
+}

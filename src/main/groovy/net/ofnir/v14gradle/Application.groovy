@@ -8,6 +8,7 @@ import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.H1
+import com.vaadin.flow.component.listbox.MultiSelectListBox
 import com.vaadin.flow.component.page.AppShellConfigurator
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.router.Route
@@ -36,24 +37,9 @@ class HelloService {
 @Route("")
 class MainView extends Composite<Div> {
     MainView(HelloService lolService) {
-        TextField tf = new TextField().tap {
-            placeholder = "Please enter a name to greet"
-            id = "name-input"
-            focus()
+        def listBox = new MultiSelectListBox().tap {
+            setItems((1..20).collect { UUID.randomUUID().toString() })
         }
-        Button b = new Button("Greet!").tap {
-            addThemeVariants(ButtonVariant.LUMO_PRIMARY)
-            id = "greet-button"
-            addClickShortcut(Key.ENTER)
-            addClickListener {
-                content.add(new Div(new Text(lolService.sayHello(tf.value))))
-            }
-        }
-        content.tap {
-            add(new H1("Greeting Service"))
-            add(new FormLayout(tf, b).tap{
-                responsiveSteps = [new FormLayout.ResponsiveStep("0px", 1)]
-            })
-        }
+        content.add(listBox)
     }
 }
