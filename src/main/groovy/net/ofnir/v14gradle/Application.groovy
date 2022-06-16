@@ -1,21 +1,24 @@
 package net.ofnir.v14gradle
 
 import com.vaadin.flow.component.Composite
-import com.vaadin.flow.component.Key
-import com.vaadin.flow.component.Text
-import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.button.ButtonVariant
-import com.vaadin.flow.component.formlayout.FormLayout
+import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.html.Div
-import com.vaadin.flow.component.html.H1
+import com.vaadin.flow.component.notification.Notification
 import com.vaadin.flow.component.page.AppShellConfigurator
-import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.router.Route
 import com.vaadin.flow.spring.annotation.EnableVaadin
 import com.vaadin.flow.theme.Theme
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.stereotype.Service
+
+import java.time.DayOfWeek
+import java.time.Month
+import java.time.chrono.IsoChronology
+import java.time.format.DateTimeFormatterBuilder
+import java.time.format.FormatStyle
+import java.time.format.TextStyle
+import java.time.temporal.WeekFields
 
 @SpringBootApplication
 @EnableVaadin
@@ -36,24 +39,45 @@ class HelloService {
 @Route("")
 class MainView extends Composite<Div> {
     MainView(HelloService lolService) {
-        TextField tf = new TextField().tap {
-            placeholder = "Please enter a name to greet"
-            id = "name-input"
-            focus()
-        }
-        Button b = new Button("Greet!").tap {
-            addThemeVariants(ButtonVariant.LUMO_PRIMARY)
-            id = "greet-button"
-            addClickShortcut(Key.ENTER)
-            addClickListener {
-                content.add(new Div(new Text(lolService.sayHello(tf.value))))
-            }
-        }
-        content.tap {
-            add(new H1("Greeting Service"))
-            add(new FormLayout(tf, b).tap{
-                responsiveSteps = [new FormLayout.ResponsiveStep("0px", 1)]
+        def datePicker = new DatePicker().tap {
+            setI18n(new DatePicker.DatePickerI18n().tap {
+                def locale = Locale.GERMAN
+
+                // date formats
+                setDateFormats(
+                    DateTimeFormatterBuilder.getLocalizedDateTimePattern(
+                        FormatStyle.MEDIUM,
+                        null,
+                        IsoChronology.INSTANCE,
+                        locale
+                    ).replace('y', 'yyyy'),
+                    // this would be useful in theory, but is not in practice, because the first format always wins
+                    DateTimeFormatterBuilder.getLocalizedDateTimePattern(
+                        FormatStyle.SHORT,
+                        null,
+                        IsoChronology.INSTANCE,
+                        locale
+                    )
+                )
+
+                // days
+                def daysOfWeek = [DayOfWeek.SUNDAY] + DayOfWeek.values().toList() // sunday first, because ISO is a joke for some
+                setWeekdays(daysOfWeek*.getDisplayName(TextStyle.FULL, locale))
+                setWeekdaysShort(daysOfWeek*.getDisplayName(TextStyle.SHORT, locale))
+                setFirstDayOfWeek(WeekFields.of(locale).firstDayOfWeek.value % 7) // this works because, because value is + 1
+
+                // months
+                setMonthNames(Month.values()*.getDisplayName(TextStyle.FULL, locale))
+
+                // words (use your translation backend here)
+                setWeek("Woche")
+                setToday("Heute")
+                setCancel("Abbrechen")
+            })
+            addValueChangeListener({
+                Notification.show(it.value.toString())
             })
         }
+        content.add(datePicker)
     }
 }
