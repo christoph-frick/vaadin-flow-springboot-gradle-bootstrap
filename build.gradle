@@ -1,4 +1,5 @@
 plugins {
+    id "com.github.ben-manes.versions" version "${versionsGradlePluginVersion}"
     id 'org.springframework.boot' version "${springbootGradlePluginVersion}"
     id 'com.vaadin' version "${vaadinGradlePluginVersion}"
     id 'groovy'
