@@ -13,9 +13,9 @@ targetCompatibility = '17'
 repositories {
     mavenLocal()
     mavenCentral()
-    maven {
-        url = "https://maven.vaadin.com/vaadin-prereleases"
-    }
+    // maven {
+    //     url = "https://maven.vaadin.com/vaadin-prereleases"
+    // }
 }
 
 bootRun {

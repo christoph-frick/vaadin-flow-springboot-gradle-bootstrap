@@ -33,16 +33,13 @@ out/
 .vscode/
 
 ### VAADIN ###
-/node
-/node_modules
 /package-lock.json
 /package.json
-/webpack.config.js
-/webpack.generated.js
-/pnpm-lock.yaml
-/pnpmfile.js
+/frontend/index.html
+/frontend/generated
+/node
+/node_modules
 /tsconfig.json
 /types.d.ts
-/src/main/resources/META-INF/resources/themes/app-theme/app-theme.generated.js
-/frontend/generated/
-/frontend/index.html
+/vite.config.ts
+/vite.generated.ts
