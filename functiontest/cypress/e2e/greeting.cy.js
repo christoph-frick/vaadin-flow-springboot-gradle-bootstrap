@@ -8,10 +8,10 @@ describe('Happy path', function() {
 		cy.contains("Greeting Service")
 	})
 	it('Greet the world', () => {
-		cy.shadowGet('#name-input')
-			.shadowFind("input")
+		cy.get('#name-input')
+			.find("input")
 			.type("World")
-		cy.shadowGet('#greet-button')
+		cy.get('#greet-button')
 			.click()
 		cy.contains('Hello, World')
 	})

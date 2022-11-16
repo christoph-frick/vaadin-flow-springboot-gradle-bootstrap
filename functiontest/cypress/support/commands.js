@@ -23,13 +23,3 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
-
-// helper to search the whole DOM across shadow DOM borders
-Cypress.Commands.add("shadowGet", (toFind) => {
-    cy.get(toFind, {includeShadowDom: true})
-})
-
-// helper to find something inside a shadow root
-Cypress.Commands.add("shadowFind", {prevSubject: true}, (subject, toFind) => {
-    cy.wrap(subject).shadow().find(toFind)
-})
